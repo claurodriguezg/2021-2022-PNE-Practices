@@ -19,9 +19,14 @@ def seq_read_fasta(filename):
     seq = seq[seq.find("\n"):].replace("\n", "")
     return seq
 
-def seq_len(seq):
-    list_genes = ["U5", "ADA", "FRAT1", "FXN"]
-    for g in list_genes:
-        result = seq(g)
-    return list_genes, result, g
+def seq_len():
+    genes_dict = ["U5": 0, "ADA": 0, "FRAT1": 0, "FXN": 0]
+    for g in genes_dict:
+        FOLDER = "./sequences/"
+        f = open(FOLDER + g + ".txt", "r").read()
+        full_f = f[f.find("\n"):].replace("\n", "")
+
+        for g in genes_dict:
+            result = seq(g)
+        return list_genes, result, g
 
