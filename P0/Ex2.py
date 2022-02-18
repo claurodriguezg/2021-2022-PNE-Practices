@@ -1,7 +1,8 @@
 import seq0
 filename = seq0.get_file()
 sequence = seq0.seq_read_fasta(filename)
-print(sequence[0:20]) #in order to get the amount of character we want we subtract the first number to the second number adn it has to give us the number of characters we need to print.
+result = sequence[0:20]
+print(result) #in order to get the amount of character we want we subtract the first number to the second number adn it has to give us the number of characters we need to print.
 
 
 #import seq0
