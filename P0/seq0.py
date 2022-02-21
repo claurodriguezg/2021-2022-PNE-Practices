@@ -80,9 +80,9 @@ def seq_complement(full_f):
 def genes_bases(dict_bases):
     result = []
     for d in dict_bases:
-        l = result.append(d)
+        result.append(d.values())
 
-    return l
+    return result
 
 
 
