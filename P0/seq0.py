@@ -63,10 +63,7 @@ def seq_reverse(full_f):
 
     return string, reverse_string
 
-def seq_complement():
-    FOLDER = "./sequences/"
-    f = open(FOLDER + "U5.txt", "r").read()
-    full_f = f[f.find("\n") + 1:].replace("\n", "")
+def seq_complement(full_f):
     compl = ""
     string = full_f[0:20]
     for g in string:
@@ -79,6 +76,22 @@ def seq_complement():
         elif g == "G":
             compl += "C"
     return string, compl
+
+def genes_bases(dict_bases):
+    result = []
+    for d in dict_bases:
+        l = result.append(d)
+
+    return l
+
+
+
+
+
+
+
+
+
 
 
 
