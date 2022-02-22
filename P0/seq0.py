@@ -78,13 +78,16 @@ def seq_complement(full_f):
     return string, compl
 
 def genes_bases(dict_bases):
-    result = []
-    result.append(dict_bases.values())
-    for g in result:
-        pass
+    result_b = []
+    result_k = []
+    result_b.append(dict_bases.values())
+    ending_b = result_b[-1]
+    result_k.append(dict_bases.keys())
+    ending_k = result_k[-1]
+    l = dict(zip(ending_b, ending_k))
+    ordered = max(l)
 
-
-    return result
+    return ordered, l
 
 
 
