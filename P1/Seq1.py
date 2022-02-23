@@ -49,6 +49,12 @@ class Seq:
         """Check if the length of the sequence is 0"""
         return len(self.strbases) == 0
 
+    def seq_read_fasta(self):
+        f = open("./sequences/" + self + ".txt",  "r").read()
+        self.strbases = f[f.finf("\n"):].replace("\n", "")
+
+
+
 
 
 
