@@ -20,8 +20,6 @@ class Seq:
         else:
             print("New sequence created !")
 
-
-
     def __str__(self):
         """Method called when the object is being printed"""
         return self.strbases
@@ -41,8 +39,6 @@ class Seq:
 
     def len(self):
         """Calculate the length of the sequence"""
-        if not self.strbases == "ERROR":
-            len(self.strbases) == 0
         return len(self.strbases)
 
     def null(self):
@@ -52,6 +48,38 @@ class Seq:
     def seq_read_fasta(self):
         f = open("./sequences/" + self + ".txt",  "r").read()
         self.strbases = f[f.finf("\n"):].replace("\n", "")
+
+    def new_len(self):
+        new_len = ""
+        if self.strbases == "ERROR":
+            return len(new_len)
+
+    def count_base(self):
+        count_a = 0
+        count_c = 0
+        count_g = 0
+        count_t = 0
+        if len(self.strbases) > 0:
+            count_a += self.strbases.count("A")
+            count_c += self.strbases.count("C")
+            count_g += self.strbases.count("G")
+            count_t += self.strbases.count("T")
+
+        return count_a, count_c, count_g, count_t
+
+    def count(self):
+        bases = ["A", "C", "G", "T"]
+        count = []
+        for i in self.strbases:
+            a = count.append(self.strbases.count("A"))
+            c = count.append(self.strbases.count("C"))
+            g = count.append(self.strbases.count("G"))
+            t = count.append(self.strbases.count("T"))
+        dict_six = dict(zip(bases, count))
+
+        return dict_six
+
+
 
 
 
