@@ -1,7 +1,8 @@
 import socket
- #configure the server´s IP and PORT
+
+# Configure the Server's IP and PORT
 PORT = 8000
-IP = "10.3.56.165"
+IP = "127.0.0.1"
 MAX_OPEN_REQUESTS = 5
 
 # Counting the number of connections
@@ -18,8 +19,7 @@ try:
     while True:
         # accept connections from outside
         print("Waiting for connections at {}, {} ".format(IP, PORT))
-        (clientsocket, address) = serversocket.accept() #this is just for the person to conect
-        #if someone connects no one else can
+        (clientsocket, address) = serversocket.accept()
 
         # Another connection!e
         number_con += 1
@@ -32,12 +32,11 @@ try:
         print("Message from client: {}".format(msg))
 
         # Send the messag
-        #message = "Hello from the teacher's server"
-        message = len(message) #---> msg = message
-        send_bytes = str.encode(message) #we can nor apply the encode to a int --> send_bytes = str(message).encode()
+        message = "Hello from the teacher's server"
+        send_bytes = str.encode(message)
         # We must write bytes, not a string
         clientsocket.send(send_bytes)
-        clientsocket.close() #the fist user leaves the server. A new user can connect now
+        clientsocket.close()
 
 except socket.error:
     print("Problems using port {}. Do you have permission?".format(PORT))

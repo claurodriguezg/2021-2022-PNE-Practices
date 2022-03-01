@@ -6,6 +6,7 @@ import colorama #write pip install termcolor in the terminal
 PORT = 21000
 IP = "10.3.56.165"
 
+
 # First, create the socket
 # We will always use this parameters: AF_INET y SOCK_STREAM
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -80,9 +80,10 @@ class Seq:
 
     def reverse(self):
         if self.valid_sequence():
-            reversed_str = self.strbases[len(self.strbases) - 1  ]
+            reversed_str = self.strbases[len(self.strbases) - 1 :: -1 ]
         elif not self.valid_sequence():
             reversed_str = self.strbases
+
 
         return reversed_str
 

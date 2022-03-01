@@ -3,8 +3,8 @@ import socket
 # SERVER IP, PORT
 # Write here the correct parameter for connecting to the
 # Teacher's server
-PORT = 21000 #this is to conncet to the process running inthe server
-IP = "10.3.56.165" #with the ifconfig (inet - en0) #this is to connect with the server
+PORT = 8000 #this is to conncet to the process running inthe server
+IP = "localhost" #"10.3.56.165" #with the ifconfig (inet - en0) #this is to connect with the server
 #both IP and PORT have to match in order to work
 #later everytime a CLIENT connects its goign to recieve a different port even tho the server maintains the same one
 #if we change the servers port in the client file is not going to work because it would be like "if nobody was there to listen"
