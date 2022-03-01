@@ -70,15 +70,21 @@ class Seq:
     def count(self):
         bases = ["A", "C", "G", "T"]
         count = []
-        for i in self.strbases:
-            a = count.append(self.strbases.count("A"))
-            c = count.append(self.strbases.count("C"))
-            g = count.append(self.strbases.count("G"))
-            t = count.append(self.strbases.count("T"))
+        a = count.append(self.strbases.count("A"))
+        c = count.append(self.strbases.count("C"))
+        g = count.append(self.strbases.count("G"))
+        t = count.append(self.strbases.count("T"))
         dict_six = dict(zip(bases, count))
 
-        return dict_six
+        return a, c, g, t, count, dict_six
 
+    def reverse(self):
+        if self.valid_sequence():
+            reversed_str = self.strbases[len(self.strbases) - 1  ]
+        elif not self.valid_sequence():
+            reversed_str = self.strbases
+
+        return reversed_str
 
 
 
