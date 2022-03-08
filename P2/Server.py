@@ -21,7 +21,7 @@ try:
         (clientsocket, address) = serversocket.accept() #this is just for the person to conect
         #if someone connects no one else can
 
-        # Another connection!e
+        # Another connection!
         number_con += 1
 
         # Print the conection number

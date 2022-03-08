@@ -3,8 +3,8 @@ import termcolor
 import colorama #write pip install termcolor in the terminal
 
 # SERVER IP, PORT
-PORT = 21000
-IP = "10.3.56.165"
+PORT = 8080
+IP = "10.3.39.204"
 
 
 # First, create the socket
@@ -23,7 +23,7 @@ msg = s.recv(2048)
 print("MESSAGE FROM THE SERVER:\n")
 colorama.init()
 print(colorama.Fore.RED + msg.decode("utf-8"))
-termcolor.cprint(msg.decode("utf-8"), "green")
+termcolor.cprint(msg.decode("utf-8"), "blue") #si cambio el color entre los "" se cambia el color del mensaje
 
 # Closing the socket
 s.close()
