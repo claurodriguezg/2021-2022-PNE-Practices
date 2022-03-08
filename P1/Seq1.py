@@ -84,12 +84,28 @@ class Seq:
         elif not self.valid_sequence():
             reversed_str = self.strbases
 
+        if len(reversed_str) == 0:
+            reversed_str = "NULL"
 
         return reversed_str
 
+    def complement(self):
+        compl = ""
+        for g in self.strbases:
+            if g == "A":
+                compl += "T"
+            elif g == "T":
+                compl += "A"
+            elif g == "C":
+                compl += "G"
+            elif g == "G":
+                compl += "C"
+        if len(compl) == 0:
+            compl = "NULL"
+        if self.strbases == "ERROR":
+            compl = "ERROR"
+        return compl
 
+    def read_fasta(self, FILENAME):
 
-
-
-
-
+        return FILENAME
