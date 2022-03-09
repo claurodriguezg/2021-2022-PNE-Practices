@@ -4,7 +4,7 @@ import colorama #write pip install termcolor in the terminal
 
 # SERVER IP, PORT
 PORT = 8080
-IP = "10.3.39.204"
+IP = "localhost"
 
 
 # First, create the socket

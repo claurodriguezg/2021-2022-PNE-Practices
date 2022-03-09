@@ -107,5 +107,13 @@ class Seq:
         return compl
 
     def read_fasta(self, FILENAME):
+        from pathlib import Path
+
+        #file_contents = Path(FILENAME).read_text()
+        #lines = file_contents.splitlines()
+        #body = lines[1:]
+        #self.strbases = ""
+        #for lines in body:
+            #self.strbases += lines
 
         return FILENAME

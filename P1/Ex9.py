@@ -1,6 +1,6 @@
 import Seq1
 print("----| Exercise 1, Exercise 9 |-----")
-s = Seq1.Seq("")
+s = Seq1.Seq()
 
 f = open("U5.txt", "r").read()
 FILENAME = f[f.find("\n") + 1:].replace("\n", "")

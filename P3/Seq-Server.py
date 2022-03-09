@@ -1,4 +1,5 @@
 import socket
+import colorama
 
 # Configure the Server's IP and PORT
 PORT = 8080 #6123 always work
@@ -52,14 +53,14 @@ print("The server is configured!")
 
 while True:
     # -- Waits for a client to connect
-    print("Waiting for Clients to connect")
+    print("Waiting for Clients to connect...")
     try:
         (cs, client_ip_port) = ls.accept()
         # -- Server stopped manually
     except KeyboardInterrupt:
         print("Server stopped by the user")
 
-        # -- Close the listenning socket
+        # -- Close the listening socket
         ls.close()
 
         # -- Exit!
@@ -77,13 +78,30 @@ while True:
 
         # -- We decode it for converting it
         # -- into a human-redeable string
-        msg = msg_raw.decode()
+        msg = msg_raw.decode().replace("\n", "").strip() #strip para quitar los espacios de la izq y de la derecha
+        splitted_command = msg.split(" ")
+        cmd = splitted_command[0]
+        #arg = msg.split(' ')[1] #if we are not using the msg again we can just do the slipt after the strip
+        if cmd != "PING":
+            arg = splitted_command[1]
+            #print(arg)
+        #print(cmd)
 
         # -- Print the received message
-        print(f"Message received: {msg}")
+        #print(f"Message received: {msg}")
 
         # -- Send a response message to the client
-        response = "HELLO. I am the Happy Server :-)\n"
+        if msg == "PING":
+            color_txt = "PING command! "
+            #print(color_txt)
+            colorama.init()
+            print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+            response = "OK!\n"
+
+        else:
+            response = "HELLO. I am the Server :-)\n"
+
+        print(response)
 
         # -- The message has to be encoded into bytes
         cs.send(response.encode())

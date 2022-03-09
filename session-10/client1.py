@@ -20,3 +20,5 @@ s.send(str.encode("HELLO FROM THE CLIENT!!!"))
 
 # Closing the socket
 s.close()
+
+#everytime we write code in the server we need to stoop the server and run it again 
