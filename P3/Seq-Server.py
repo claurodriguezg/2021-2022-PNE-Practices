@@ -98,6 +98,9 @@ while True:
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
             response = "OK!\n"
 
+        elif cmd == "REV"
+            response = arg[::-1]
+
         else:
             response = "HELLO. I am the Server :-)\n"
 
