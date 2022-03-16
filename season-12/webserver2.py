@@ -1,5 +1,6 @@
 import socket
 import termcolor
+import pathlib
 
 
 # -- Server network parameters
@@ -29,21 +30,26 @@ def process_client(s):
     # header
     # blank line
     # Body (content to send)
+    print(req_line)
+    route =req_line.split(" ")[1] #everytime i change the server i need to run it
+    #if we change the htmlfile WE DO NOT NEED TO RESTART IT in order for it to function
+    print("ROUTE", route)
+
+    if route == "/": #this route right now is not defined
+        #this new contesnts are written in HTML file
+        body = pathlib.Path("html/index.html").read_text()
+    #elif route == "/goodbye/":
+        #body = pathlib.Path("html/goodbye.html").route_text()
+    #elif route == "/question":
+        #body = pathlib.Path("html/question.html").read_text()
+    elif route == "/favicon.ico":
+        body = pathlib.Path("html/index.html").read_text()
+    else:
+        filename = route[1:]
+        body = pathlib.Path("html/" + filename + ".html").read_text()
+
 
     # This new contents are written in HTML language
-    body = """
-    <!DOCTYPE html>
-    <html lang="en" dir="ltr">
-      <head>
-        <meta charset="utf-8">
-        <title>Green server</title>
-      </head>
-      <body style="background-color: lightgreen;">
-        <h1>GREEN SERVER</h1>
-        <p>I am the Green Server! :-)</p>
-      </body>
-    </html>
-    """
     # -- Status line: We respond that everything is ok (200 code)
     status_line = "HTTP/1.1 200 OK\n"
 
