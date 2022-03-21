@@ -1,10 +1,9 @@
 import socket
 
-
 class Client:
 
-   # PORT = 8000
-    #IP = "localhost"
+    PORT = 9000
+    IP = "localhost"
 
 
     def __init__(self, ip, port):
@@ -16,7 +15,7 @@ class Client:
 
     def __str__(self):
 
-        return "Connection to SERVER at "  +  str(self.ip) + " PORT:" + str(self.port)
+        return "Connection to SERVER at "  +  str(self.ip) + "," + " PORT: " + str(self.port)
 
     def talk(self, msg):
         # -- Create the socket

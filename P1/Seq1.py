@@ -1,23 +1,17 @@
 class Seq:
 
-    def __init__(self, strbases): #strbasis son los parametros de la sequencia
-        self.strbases = strbases #bases de la sequencia (self --> constructor)
-        if not self.valid_sequence():
-            self.strbases = "ERROR"
-            print("ERROR !!")
-        else:
-            print("New sequence created !")
-
-    def __init__(self, strbases = "NULL"):
+    def __init__(self, strbases = "NULL"):  #strbasis son los parametros de la sequencia
         self.strbases = strbases  # bases de la sequencia (self --> constructor)
-        if not self.valid_sequence():
+
+        if strbases == "NULL":
+            print("NULL Seq created !")
+
+        elif not self.valid_sequence():
             self.strbases = "ERROR"
             print("INVALID Seq!")
 
-        elif len(self.strbases) == 0:
-            print("NULL Seq created")
-
         else:
+            self.strbases = strbases
             print("New sequence created !")
 
     def __str__(self):
@@ -39,20 +33,18 @@ class Seq:
 
     def len(self):
         """Calculate the length of the sequence"""
-        return len(self.strbases)
+        new_len = ""
+        if self.strbases == "ERROR" or self.strbases == "NULL":
+            new_len = 0
+            return(new_len)
+        else:
+            return len(self.strbases)
 
-    def null(self):
-        """Check if the length of the sequence is 0"""
-        return len(self.strbases) == 0
 
     def seq_read_fasta(self):
         f = open("./sequences/" + self + ".txt",  "r").read()
         self.strbases = f[f.finf("\n"):].replace("\n", "")
 
-    def new_len(self):
-        new_len = ""
-        if self.strbases == "ERROR":
-            return len(new_len)
 
     def count_base(self):
         count_a = 0
@@ -106,14 +98,29 @@ class Seq:
             compl = "ERROR"
         return compl
 
-    def read_fasta(self, FILENAME):
+    def read_fasta(self, filename):
         from pathlib import Path
+        file_contents = Path(filename).read_text()
+        lines = file_contents.splitlines()
+        body = lines[1:]
+        self.strbases = ""
+        for lines in body:
+            self.strbases += lines
+        #we are introducing the seq in a strbases (just the body)
 
-        #file_contents = Path(FILENAME).read_text()
-        #lines = file_contents.splitlines()
-        #body = lines[1:]
-        #self.strbases = ""
-        #for lines in body:
-            #self.strbases += lines
+    def genes_bases(self):
+        bases = ["A", "C", "G", "T"]
+        count_a, count_c, count_g, count_t = self.count_base()
+        total = [count_a, count_c, count_g, count_t]
+        d = dict(zip(total, bases))
+        ordered = max(d)
 
-        return FILENAME
+        return(ordered, d)
+
+
+
+
+
+
+
+

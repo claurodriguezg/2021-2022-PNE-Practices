@@ -1,6 +1,6 @@
 import socket
  #configure the server´s IP and PORT
-PORT = 8000
+PORT = 8080
 IP = "10.3.56.165"
 MAX_OPEN_REQUESTS = 5
 
