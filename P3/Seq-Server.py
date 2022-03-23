@@ -1,17 +1,18 @@
 import socket
 import colorama
-import P1.Seq1
+import P3.sequence
 
-def count_bases(arg):
-    d = {"A": 0, "C": 0, "G": 0, "T": 0}
-    for b in arg:
-        d[b] += 1
-    return d
+#def count_bases(arg):
+    #d = {"A": 0, "C": 0, "G": 0, "T": 0}
+    #for b in arg:
+        #d[b] += 1
+    #return d
 
-def covert_message(base_count)
-
-
-
+#def covert_message(base_count):
+    #message = ""
+    #for k,v in base_count.items():
+        #message += k + ":" + str(v) + "\n"
+    #return message
 
 
 # Configure the Server's IP and PORT
@@ -90,10 +91,10 @@ while True:
             color_txt = "INFO"
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
-            seq = P1.Seq1.Seq()
-            base_count = count_bases(arg)
-            response = convert_message(base_count)
-
+            seq = P3.sequence.Seq(arg)
+            response = seq.bases()
+            #response = seq.convert_message(bases)
+            response = "Total Length: " + str(len(arg)) + "\n" + response
 
 
 
