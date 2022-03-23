@@ -127,8 +127,6 @@ while True:
             g = 0
             t = 0
             seq = sequence.Seq(arg)
-            #seq.valid_sequence()
-
             if seq.valid_sequence():
                 for i in arg:
                     if i == "A":
