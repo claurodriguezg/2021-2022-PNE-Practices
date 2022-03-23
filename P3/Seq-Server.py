@@ -92,11 +92,19 @@ while True:
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
             seq = P3.sequence.Seq(arg)
-            response = seq.bases()
+            response, count = seq.bases(arg)
             #response = seq.convert_message(bases)
-            response = "Total Length: " + str(len(arg)) + "\n" + response
+            response = "Sequence: " + arg + "\n" + "Total Length: " + str(len(arg)) + "\n" + response
 
+            #response += " " + "(" + str(round((count*100)/len(arg), 3)) + "%)"
 
+        elif cmd == "COMP":
+            color_txt = "COMP"
+            colorama.init()
+            print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+            seq = P3.sequence.Seq(arg)
+            compl = seq.complement(arg)
+            response = compl + " "
 
         elif cmd == "REV":
             color_txt = "REV "
@@ -104,6 +112,15 @@ while True:
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
             response = arg[::-1] + " "
             print("New sequence created!")
+
+        elif cmd == "GENE":
+            color_txt = "GENE "
+            colorama.init()
+            print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+            seq = P3.sequence.Seq(arg)
+            compl = seq.complement(arg)
+            response = compl + " "
+
 
         else:
             response = "HELLO. I am the Server :-)\n"
@@ -117,3 +134,4 @@ while True:
         # -- Close the data socket
         cs.close()
 
+# " " + "(" + str(round((count*100)/total_count, 3)) + "%)"

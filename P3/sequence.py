@@ -81,9 +81,9 @@ class Seq:
 
         return reversed_str
 
-    def complement(self):
+    def complement(self,arg):
         compl = ""
-        for g in self.strbases:
+        for g in arg:
             if g == "A":
                 compl += "T"
             elif g == "T":
@@ -117,7 +117,7 @@ class Seq:
 
         return ordered, d
 
-    def bases(self):
+    def bases(self, arg):
         bases = ["A", "C", "G", "T"]
         count_a, count_c, count_g, count_t = self.count_base()
         total = [count_a, count_c, count_g, count_t]
@@ -132,11 +132,9 @@ class Seq:
                 g = count
             elif base == "T":
                 t = count
-            message += base + ":" + str(count) + "\n"
-        return message
+            message += base + ":" + str(count) +  " " + "(" + str(round((count*100)/len(arg), 1)) + "%)" + "\n"
 
-    #def covert_message(self, bases):
-        #message = ""
-        #for count, base in bases:
-            #message += base + ":" + str(count) + "\n"
-        #return message
+        return message,count
+
+
+
