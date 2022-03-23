@@ -1,6 +1,5 @@
 import socket
 import colorama
-import termcolor
 import sequence
 
 #def count_bases(arg):
@@ -85,8 +84,14 @@ while True:
             color_txt = "GET"
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
-            list_seq = ["ACTAAG", "AGCCTAA", "ATAACCA", "ACGGGAAT", "ATACGA"]
-            response = list_seq[int(arg)] + " "
+            list_seq = ["U5", "FRAT1", "ADA", "FXN", "RNU6_269P"]
+            i = int(arg)
+            if i <= 4:
+                choosen = list_seq[i]
+                seq = sequence.Seq()
+                filename = f"../P0/sequences/" + choosen + ".txt"
+                full_f = str(seq.read_fasta(filename))
+                response = full_f
 
         elif cmd == "INFO":
             color_txt = "INFO"
@@ -118,14 +123,13 @@ while True:
             color_txt = "GENE "
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+
             seq = sequence.Seq(arg)
             #s = "../P0/sequences/" + arg + ".txt"
-            seq.read_fasta(seq)
-            gene = []
-            for i in seq:
-                gene.append(i)
-            response = "GENE" + str(seq) + ":" + gene
-
+            #filename = seq.read_fasta(arg)
+            filename = f"../P0/sequences/" + arg + ".txt"
+            full_f = seq.read_fasta(filename)
+            response =  str(full_f)
 
         else:
             response = "HELLO. I am the Server :-)\n"

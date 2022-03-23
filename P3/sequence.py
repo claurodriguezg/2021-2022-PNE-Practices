@@ -6,9 +6,9 @@ class Seq:
         if strbases == "NULL":
             print("NULL Seq created !")
 
-        elif not self.valid_sequence():
-            self.strbases = "ERROR"
-            print("INVALID Seq!")
+        #elif not self.valid_sequence():
+            #self.strbases = "ERROR"
+            #print("INVALID Seq!")
 
         else:
             self.strbases = strbases
@@ -99,14 +99,13 @@ class Seq:
         return compl
 
     def read_fasta(self, filename):
-        from pathlib import Path
-        file_contents = Path(filename).read_text()
-        lines = file_contents.splitlines()
-        body = lines[1:]
-        self.strbases = ""
-        for lines in body:
-            self.strbases += lines
-        #we are introducing the seq in a strbases (just the body)
+        try:
+            full_seq = open(filename, "r").read()
+            full_seq = full_seq[full_seq.find("\n"):].replace("\n", "")
+            return full_seq
+
+        except FileNotFoundError:
+            print("File does not exist. Choose another file.")
 
     def genes_bases(self):
         bases = ["A", "C", "G", "T"]
@@ -135,6 +134,7 @@ class Seq:
             message += base + ":" + str(count) +  " " + "(" + str(round((count*100)/len(arg), 1)) + "%)" + "\n"
 
         return message,count
+
 
 
 
