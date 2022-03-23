@@ -1,6 +1,7 @@
 import socket
 import colorama
-import P3.sequence
+import termcolor
+import sequence
 
 #def count_bases(arg):
     #d = {"A": 0, "C": 0, "G": 0, "T": 0}
@@ -91,7 +92,7 @@ while True:
             color_txt = "INFO"
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
-            seq = P3.sequence.Seq(arg)
+            seq = sequence.Seq(arg)
             response, count = seq.bases(arg)
             #response = seq.convert_message(bases)
             response = "Sequence: " + arg + "\n" + "Total Length: " + str(len(arg)) + "\n" + response
@@ -102,7 +103,7 @@ while True:
             color_txt = "COMP"
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
-            seq = P3.sequence.Seq(arg)
+            seq = sequence.Seq(arg)
             compl = seq.complement(arg)
             response = compl + " "
 
@@ -117,15 +118,20 @@ while True:
             color_txt = "GENE "
             colorama.init()
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
-            seq = P3.sequence.Seq(arg)
-            compl = seq.complement(arg)
-            response = compl + " "
+            seq = sequence.Seq(arg)
+            #s = "../P0/sequences/" + arg + ".txt"
+            seq.read_fasta(seq)
+            gene = []
+            for i in seq:
+                gene.append(i)
+            response = "GENE" + str(seq) + ":" + gene
 
 
         else:
             response = "HELLO. I am the Server :-)\n"
 
         print(response)
+
 
 
         # -- The message has to be encoded into bytes
@@ -135,3 +141,5 @@ while True:
         cs.close()
 
 # " " + "(" + str(round((count*100)/total_count, 3)) + "%)"
+
+#P3.sequence

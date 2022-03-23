@@ -41,9 +41,9 @@ class Seq:
             return len(self.strbases)
 
 
-    def seq_read_fasta(self):
-        f = open("./sequences/" + self + ".txt",  "r").read()
-        self.strbases = f[f.finf("\n"):].replace("\n", "")
+    def seq_read_fasta(self,arg):
+        f = open("../P0/sequences/" + arg + ".txt",  "r").read()
+        self.strbases = f[f.find("\n"):].replace("\n", "")
 
 
     def count_base(self):
