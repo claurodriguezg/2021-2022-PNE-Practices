@@ -1,0 +1,25 @@
+def ex_3(arg):
+    print("Sequence", arg)
+    total_len = len(arg)
+    print("Total length:", total_len)
+    count_a = 0
+    count_c = 0
+    count_g = 0
+    count_t = 0
+    for b in arg:
+        if b == "A":
+            count_a += 1
+            per_a = round((count_a / total_len) * 100, 3)
+        elif b == "C":
+            count_c += 1
+            per_c = round((count_c / total_len) * 100, 3)
+        elif b == "G":
+            count_g += 1
+            per_g = round((count_g / total_len) * 100, 3)
+        elif b == "T":
+            count_t += 1
+            per_t = round((count_g / total_len) * 100, 3)
+
+    response = print(" A:", count_a, "(",per_a, "%)", "\n", "C:", count_c, "(", per_c, "%)", "\n", "G:", count_g, "(", per_g, "%)", "\n", "T:", count_t, "(", per_t, "%)")
+
+    return str(response)

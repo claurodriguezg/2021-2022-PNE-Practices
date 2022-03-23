@@ -1,9 +1,22 @@
 import socket
 import colorama
+import P1.Seq1
+
+def count_bases(arg):
+    d = {"A": 0, "C": 0, "G": 0, "T": 0}
+    for b in arg:
+        d[b] += 1
+    return d
+
+def covert_message(base_count)
+
+
+
+
 
 # Configure the Server's IP and PORT
 PORT = 8080 #6123 always work
-IP = "localhost" #you could just write localhost
+IP = "127.0.0.1" #you could just write localhost
 
 # -- Step 1: create the socket
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,39 +30,7 @@ ls.bind((IP, PORT))
 # -- Step 3: Configure the socket for listening
 ls.listen()  #if we dont specified the operating system will handle by itself how any clients can be at the same time
 
-print("The server is configured!")
-
-# -- Waits for a client to connect
-#print("Waiting for Clients to connect")
-#ls.accept()
-# -- Waits for a client to connect
-
-#(cs, client_ip_port) = ls.accept()
-
-#print("A client has connected to the server!")
-
-# -- Read the message from the client
-# -- The received message is in raw bytes
-#msg_raw = cs.recv(2048)
-
-# -- We decode it for converting it
-# -- into a human-redeable string
-#msg = msg_raw.decode()
-
-# -- Print the received message
-#print(f"Received Message: {msg}")
-
-# -- Send a response message to the client
-#response = "HELLO. I am the Happy Server :-)\n"
-
-# -- The message has to be encoded into bytes
-#cs.send(response.encode())
-
-
-
-# -- Close the socket
-#ls.close()
-
+print("SEQ Server is configured!")
 
 while True:
     # -- Waits for a client to connect
@@ -98,16 +79,40 @@ while True:
             print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
             response = "OK!\n"
 
-        elif cmd == "REV"
-            response = arg[::-1]
+        elif cmd == "GET":
+            color_txt = "GET"
+            colorama.init()
+            print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+            list_seq = ["ACTAAG", "AGCCTAA", "ATAACCA", "ACGGGAAT", "ATACGA"]
+            response = list_seq[int(arg)] + " "
+
+        elif cmd == "INFO":
+            color_txt = "INFO"
+            colorama.init()
+            print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+            seq = P1.Seq1.Seq()
+            base_count = count_bases(arg)
+            response = convert_message(base_count)
+
+
+
+
+        elif cmd == "REV":
+            color_txt = "REV "
+            colorama.init()
+            print(colorama.Fore.GREEN + color_txt + colorama.Fore.WHITE)
+            response = arg[::-1] + " "
+            print("New sequence created!")
 
         else:
             response = "HELLO. I am the Server :-)\n"
 
         print(response)
 
+
         # -- The message has to be encoded into bytes
         cs.send(response.encode())
 
         # -- Close the data socket
         cs.close()
+
