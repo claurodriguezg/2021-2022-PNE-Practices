@@ -1,6 +1,7 @@
 import http.server
 import socketserver
 import termcolor
+from pathlib import Path
 
 # Define the Server's port
 PORT = 6124
@@ -29,14 +30,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Print the resource requested (the path)
         print("  Path: " + self.path)
 
-        contents = "I am the happy server! :-)"
+        contents = Path('index.html').read_text()
 
         # Generating the response message
         self.send_response(200)  # -- Status line: OK!
 
         # Define the content-type header:
-        self.send_header('Content-Type', 'text/plain')
-        self.send_header('Content-Length', len(contents.encode()))
+        self.send_header('Content-Type: text/html\n')
+        self.send_header("Content-Length: {len(body)}\n")
 
         # The header is finished
         self.end_headers()
