@@ -7,23 +7,23 @@
   <body>
     <h3>Example of different input elements</h3>
 
-    <form action="myserver" method="get"> #in our forms we will always write get. However, by changing it we would change the cmd
+    <form action="myserver" method="get">
       Text input  <input type="text" name="msg">
       <br><br>
       Check button:
-      <input type="checkbox" name="check" value ="bbbb"> #bottons you can click on (of options)
-        #it is imp to add the check in order to have a key check abd a value - if i dont press check i wont get the key or value in the url
+      <input type="checkbox" name="check" value ="bbbb">
+
       <br><br>
       Radio buttons:
       <input type="radio" name="base" value="A" checked> A
       <input type="radio" name="base" value="C"> C
       <input type="radio" name="base" value="T"> T
       <input type="radio" name="base" value="G"> G
-        #the behaviour is different - i can only press one of them: if i change my selection the other one is eliminated (because all are from the same group(base))
+
       <br><br>
       Options: <br>
       Choose operation:
-      <select name="operation"> # i create a combo box
+      <select name="operation">
         <option value="count">Count</option>
         <option value="perc">Percentage</option>
           <option value="something">XXXXXX</option>
