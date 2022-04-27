@@ -1,0 +1,17 @@
+endpoint = after the slash
+we are going to use the ping  endpoint
+the important thing is at the bottom
+we need to creat a string that represents the server, the endpoint and the params
+(only the endpoint and the params change- in the params one at least we need the
+string already written)
+we don't need the port anymore because we are working on an external server
+then, we are going to be taken to another server
+the server don't have to be in the URL just endpoint + params
+the server is just to connect
+is trying to transform everything (string) to the corresponding type --> json.loads
+gets the string converts it to the diccionary and if it's an int then it
+converts it to the corresponding type. Therefore, if we write if data1['ping'] == "1" it wont
+work because in the diccionary is written as an int
+
+for ex 2 we need to change the endpoint and maybe the params
+we
