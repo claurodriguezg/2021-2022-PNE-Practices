@@ -8,7 +8,7 @@ from urllib.parse import parse_qs, urlparse
 HTML_FOLDER = "./html/"
 LIST_SEQUENCES = ["ACGTCCAGTAAA", "ACGTAGTTTTTAAACCC", "GGGTAAACTACG",
                   "CGTAGTACGTA", "TGCATGCCGAT", "ATATATATATATATATATA"]
-LIST_GENES = ["ADA", "FRAT1", "FXN", "RNU5A", "U5"]
+LIST_GENES = ["ADA", "FRAT1", "FXN", "RNU6_269P", "U5"]
 
 def read_html_file(filename):
     contents = Path(HTML_FOLDER + filename).read_text()
@@ -25,6 +25,19 @@ def count_bases(seq):
         d[k] = [v, (v * 100) / total]
     return d
 
+def complement(seq):
+    compl = ""
+    for g in seq:
+        if g == "A":
+            compl += "T"
+        elif g == "T":
+            compl += "A"
+        elif g == "C":
+            compl += "G"
+        elif g == "G":
+            compl += "C"
+
+    return compl
 
 def convert_message(base_count):
     message = ""
@@ -58,13 +71,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         url_path = urlparse(self.path)
         path = url_path.path #this is the url
-        arguments = parse_qs(url_path.query)
+        arguments = parse_qs(url_path.query)  #esto es lo que conviertes en diccionario
         print("The old path was", self.path)
         print("The new path is", url_path.path)
         print("arguments", arguments)
         # Message to send back to the client
         if self.path == "/":
-            contents = read_html_file("html/index.html")\
+            contents = read_html_file("index.html")\
                 .render(context=
                         {"n_sequences": len(LIST_SEQUENCES),
                          "genes": LIST_GENES})
@@ -81,33 +94,44 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 "sequence": sequence
             })
         elif path == "/gene":
-            gene_name = arguments["gene_name"][0]
-            for g in LIST_GENES:
-                sequence = Path("./sequences/" + gene_name + ".txt").read_text()
-                sequence = sequence[sequence.fin("\n"):].replace("\n", "")
-                contents = read_html_file(g + ".html") \
-                    .render(context={
-                    "gene_name": gene_name,
-                    "sequence": sequence
-                })
+            gene_name = arguments["genes"][0]
+            sequence = Path("./sequences/" + gene_name + ".txt").read_text()
+            sequence = sequence[sequence.find("\n"):].replace("\n", "")
+            contents = read_html_file( path + ".html") \
+                .render(context={
+                "gene_name": gene_name,
+                "sequence": sequence
+            })
         elif path == "/operation":
-            sequence = arguments["sequence"][0]
-            operation = arguments["operation"][0]
-            if operation == "rev":
+            sequence = arguments["msg"][0]
+            operation = arguments["option"][0]
+            print(operation)
+
+            if operation == "Rev":
                 contents = read_html_file(path[1:] + ".html") \
                     .render(context={
+                    "sequence": sequence,
                     "operation": operation,
-                    "result": seq.reverse()
+                    "result": sequence.reverse()
                 })
-            elif operation == "info":
+            elif operation == "Info":
                 contents = read_html_file(path[1:] + ".html") \
                     .render(context={
+                    "sequence": sequence,
                     "operation": operation,
                     "result": info_operation(sequence)
                 })
+
+            elif operation == "Comp":
+                print(operation, "test")
+                contents = read_html_file(path[1:] + ".html") \
+                    .render(context={
+                    "sequence": sequence,
+                    "operation": operation,
+                    "result": complement(sequence)
+                    })
         else:
             contents = "I am the happy server! :-)"
-
 
 
         # Generating the response message

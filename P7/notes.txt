@@ -1,0 +1,31 @@
+do_GET(self):
+- get url with urlparse
+-get arguments with parse_qs
+
+THE BIG IF
+
+    example:
+
+    if path == "list_species"
+    SERVER = "rest_ensembl_org"
+
+
+
+   - to make a call to the esmebl api we need server, url( with endpoint) and params.
+
+   - the server is always the same for every call, but the ensembl endpoint may change -> to solve the problem we
+    make the endpoint an argument so it doesn´t affect the whole code: conn.request("GET", endpoint + PARAMS)  -> like that
+
+    the next things should be inside the elif == "/get":
+
+       - to append a param we add in the def make_call the params as an arg def make_call(params, ...)
+       params shoukd be &param1= a it should have an umpersum, params, a number, equal and value
+
+       - params = "&number=" + str(n_sequence)
+       ensembl_asnwer = make_call("/sequence/id", params)
+
+
+
+
+
+

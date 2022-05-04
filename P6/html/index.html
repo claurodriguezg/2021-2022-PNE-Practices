@@ -5,6 +5,7 @@
         <title>Seq2 Server</title>
     </head>
     </body>
+    <h1>Seq2 Server </h1>
         <p>Access to the server</p>
 
         <hr>
@@ -16,9 +17,9 @@
         <form action = "/get">
              Get a sequence. Select a sequence number:
             <select name="n_sequence" >
-                {% for n in range(0, context.n_sequence) %}
-                <option value={{n}}>{{n}} </option>
-                { % endfor %}
+                    {% for n in range(context.n_sequences) %}
+                <option value={{n}}>{{n}}</option>
+                {% endfor %}
             </select>
             <input type="submit" value="GET">
         </form>
@@ -27,9 +28,9 @@
         <form action = "/gene">
              Get a sequence. Select a sequence number:
             <select name="genes" >
-                {% for n in range(0, context.n_sequence) %}
-                <option value={{g}}>{{g}} </option>
-                { % endfor %}
+                {% for n in context.genes %}
+                <option value={{n}}>{{n}}</option>
+                {% endfor %}
             </select>
             <input type="submit" value="GENE">
         </form>
