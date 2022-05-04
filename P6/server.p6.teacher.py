@@ -22,7 +22,7 @@ def count_bases(seq):
 
     total = sum(d.values())
     for k,v in d.items():
-        d[k] = [v, (v * 100) / total]
+        d[k] = [v, round((v * 100) / total,1)]
     return d
 
 def complement(seq):
@@ -42,7 +42,7 @@ def complement(seq):
 def convert_message(base_count):
     message = ""
     for k,v in base_count.items():
-        message += k + ": " + str(v[0]) + " (" + str(v[1]) + "%)" +"\n"
+        message += k + ": " + str(v[0]) + " (" + str(v[1]) + "%)" + "\n"
     return message
 
 def info_operation(arg):
@@ -112,7 +112,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     .render(context={
                     "sequence": sequence,
                     "operation": operation,
-                    "result": sequence.reverse()
+                    "result": sequence[::-1]
                 })
             elif operation == "Info":
                 contents = read_html_file(path[1:] + ".html") \
