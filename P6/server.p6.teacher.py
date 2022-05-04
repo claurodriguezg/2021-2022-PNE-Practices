@@ -15,7 +15,6 @@ def read_html_file(filename):
     contents = j.Template(contents)
     return contents
 
-
 def count_bases(seq):
     d = {"A": 0, "C": 0, "G": 0, "T": 0}
     for b in seq:
@@ -57,26 +56,24 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Print the request line
         termcolor.cprint(self.requestline, 'green')
 
-        # IN this simple server version:
-        # We are NOT processing the client's request
-        # It is a happytest server: It always returns a message saying
-        # that everything is ok
         url_path = urlparse(self.path)
-        path = url_path.path
+        path = url_path.path #this is the url
         arguments = parse_qs(url_path.query)
         print("The old path was", self.path)
         print("The new path is", url_path.path)
         print("arguments", arguments)
-        # Message to send back to the clinet
+        # Message to send back to the client
         if self.path == "/":
-            contents = read_html_file("index.html")\
+            contents = read_html_file("html/index.html")\
                 .render(context=
                         {"n_sequences": len(LIST_SEQUENCES),
                          "genes": LIST_GENES})
+            #el render se utiliza cuando usamos jinja. es lo mismo que el format de antes.
+
         elif path == "/ping":
             contents = read_html_file(path[1:] + ".html").render()
         elif path == "/get":
-            n_sequence = int(arguments["n_sequence"][0])
+            n_sequence = int(arguments["n_sequence"][0])  #always an int #the 0 is important to access to this value
             sequence = LIST_SEQUENCES[n_sequence]
             contents = read_html_file(path[1:] + ".html")\
                 .render(context = {
@@ -85,12 +82,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             })
         elif path == "/gene":
             gene_name = arguments["gene_name"][0]
-            sequence = Path("./sequences/" + gene_name + ".txt").read_text()
-            contents = read_html_file(path[1:] + ".html") \
-                .render(context={
-                "gene_name": gene_name,
-                "sequence": sequence
-            })
+            for g in LIST_GENES:
+                sequence = Path("./sequences/" + gene_name + ".txt").read_text()
+                sequence = sequence[sequence.fin("\n"):].replace("\n", "")
+                contents = read_html_file(g + ".html") \
+                    .render(context={
+                    "gene_name": gene_name,
+                    "sequence": sequence
+                })
         elif path == "/operation":
             sequence = arguments["sequence"][0]
             operation = arguments["operation"][0]
@@ -108,6 +107,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 })
         else:
             contents = "I am the happy server! :-)"
+
+
 
         # Generating the response message
         self.send_response(200)  # -- Status line: OK!

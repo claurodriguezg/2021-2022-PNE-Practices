@@ -46,7 +46,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         print("arguments")
         # Message ti send back to the client
         if self.path == "/":
-            contents = read_html_file("index.html")\
+            contents = read_html_file("html/index.html")\
                 .render(context={"n_sequences": len(LIST_SEQUENCES)})
         elif path == "/ping":
             contents = read_html_file(path[1:] + ".html").render()

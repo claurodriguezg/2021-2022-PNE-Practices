@@ -14,4 +14,6 @@ converts it to the corresponding type. Therefore, if we write if data1['ping'] =
 work because in the diccionary is written as an int
 
 for ex 2 we need to change the endpoint and maybe the params
-we
+
+
+render() Combines a given template with a given context dictionary and returns an HttpResponse object with that rendered text.
