@@ -96,6 +96,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             dict_answer = make_ensembl_request("/info/assembly/:species", "")
             species_all = dict_answer["species"]
             specie = int(arguments['specie'][0])
+            for
 
 
 
