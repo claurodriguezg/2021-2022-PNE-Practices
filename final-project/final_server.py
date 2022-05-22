@@ -80,18 +80,29 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             dict_answer = make_ensembl_request("/info/species", "")
             species_all = dict_answer["species"]
             limit = int(arguments['limit'][0])
-            species = species_all[0: limit ][0]
-            print(species)
+            selected_species = []
+            for i in range(0, limit):
+                selected_species.append(species_all[i]["common_name"])
 
-            result = species_function(species_all, limit)
+            contents = read_html_file(path[1:] + ".html") \
+                .render(context={
+                "species": selected_species,
+                "n_species": len(species_all),
+                "limit": limit
+            })
 
-            print(result)
+        elif path == "/karyotype":
+
+            dict_answer = make_ensembl_request("/info/assembly/:species", "")
+            species_all = dict_answer["species"]
+            specie = int(arguments['specie'][0])
 
 
-            contents = read_html_file(path[1:] + ".html")\
-                .render(context = {"species": result ,
-                                   "n_species": len(species_all),
-                                   "limit": limit})
+
+
+
+
+
 
 
 

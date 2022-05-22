@@ -10,7 +10,9 @@ The total number of species in the ensembl is: <p>{{context.n_species}}</p>
 The limit you have selected is: <p>{{context.limit}}</p>
 The names of the species are:
 <br>
-<p>{{context.species}}</p>
+{% for b in context.species%}
+<p>{{b}}</p>
+{% endfor %}
 
 
 </body>
