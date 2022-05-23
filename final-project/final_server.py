@@ -90,8 +90,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             dict_answer = make_ensembl_request("/info/species", "")
             species_all = dict_answer["species"]
-            limit = int(arguments['limit'][0])
             try:
+                limit = int(arguments['limit'][0])
+
                 selected_species = []
                 for i in range(0, limit):
                     selected_species.append(species_all[i]["common_name"])
@@ -102,36 +103,36 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     "n_species": len(species_all),
                     "limit": limit
                 })
-            except IndexError:
-                text = "That limit is too high. Choose a number up to 311."
+            except Exception:
                 contents = read_html_file("error.html") \
-                    .render(context = {"t": text})
+                    .render()
 
 
         elif path == "/karyotype":
-            specie = str(arguments['specie'][0].strip())
-            dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
             try:
+                specie = str(arguments['specie'][0].strip())
+                dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
+
                 info_all = dict_answer["karyotype"]
 
                 contents = read_html_file(path[1:] + ".html") \
                     .render(context={
                     "karyotype": info_all})
             except KeyError:
-                text = "That is not an available specie. Please, choose another one."
                 contents = read_html_file("error.html") \
-                    .render(context={"t": text})
+                    .render()
 
         elif path == "/chromosomeLength":
             specie = str(arguments['specie'][0].strip())
             dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
             number_chromo = int(arguments['chromosome'][0].strip())
-            dict_all = dict_answer["top_level_region"]
-
-            line_position = []
-            for i in range(0,len(dict_all)):
-                line_position.append(dict_all[i]["name"])
             try:
+                dict_all = dict_answer["top_level_region"]
+
+                line_position = []
+                for i in range(0,len(dict_all)):
+                    line_position.append(dict_all[i]["name"])
+
 
                 position = line_position.index(str(number_chromo))
                 wanted_line = dict_all[position]
@@ -143,10 +144,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     .render(context={
                     "l": length})
 
-            except ValueError:
-               text = "That chromosome does not exist. Choose another one."
+            except Exception:
                contents = read_html_file("error.html") \
-                   .render(context={"t": text})
+                   .render()
 
 
 #MEDIUM LEVEL:
@@ -206,6 +206,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 "p_c": "C: " + dict_b_p["C"] + "%",
                 "p_g": "G: " + dict_b_p["G"] + "%",
                 "p_t": "T: " + dict_b_p["T"] + "%"
+            })
+
+        elif path == "/geneList":
+            gene = str(arguments['seq'][0].strip())
+            key = GENES[gene]
+            dict_answer = make_ensembl_request("/sequence/id/" + str(key), "")
+            sequence = dict_answer["seq"]
+            contents = read_html_file(path[1:] + ".html") \
+                .render(context={
+                "g": sequence,
+                "n": names
             })
 
 
