@@ -11,11 +11,7 @@ HTML_FOLDER = "./html/"
 SERVER = 'rest.ensembl.org'
 PARAMS = '?content-type=application/json'
 
-def species_function (species_all,limit):
-    for i in range(0, limit):
-        selected_species = species_all[i]["common_name"]
-        print(selected_species)
-        return selected_species
+
 
 def read_html_file(filename):
     contents = Path(HTML_FOLDER + filename).read_text()
@@ -73,32 +69,68 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Message to send back to the client
         if self.path == "/":
             contents = read_html_file("index.html")\
-                .render(context=
-                        {"genes": SERVER + "info/species" + PARAMS})
+                .render()
         elif path == "/list_species":
 
             dict_answer = make_ensembl_request("/info/species", "")
             species_all = dict_answer["species"]
             limit = int(arguments['limit'][0])
-            selected_species = []
-            for i in range(0, limit):
-                selected_species.append(species_all[i]["common_name"])
+            try:
+                selected_species = []
+                for i in range(0, limit):
+                    selected_species.append(species_all[i]["common_name"])
 
-            contents = read_html_file(path[1:] + ".html") \
-                .render(context={
-                "species": selected_species,
-                "n_species": len(species_all),
-                "limit": limit
-            })
+                contents = read_html_file(path[1:] + ".html") \
+                    .render(context={
+                    "species": selected_species,
+                    "n_species": len(species_all),
+                    "limit": limit
+                })
+            except IndexError:
+                text = "That limit is too high. Choose a number up to 311."
+                contents = read_html_file("error.html") \
+                    .render(context = {"t": text})
+
 
         elif path == "/karyotype":
+            specie = str(arguments['specie'][0].strip())
+            dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
+            try:
+                info_all = dict_answer["karyotype"]
 
-            dict_answer = make_ensembl_request("/info/assembly/:species", "")
-            species_all = dict_answer["species"]
-            specie = int(arguments['specie'][0])
-            for
+                contents = read_html_file(path[1:] + ".html") \
+                    .render(context={
+                    "karyotype": info_all})
+            except KeyError:
+                text = "That is not an available specie. Please, choose another one."
+                contents = read_html_file("error.html") \
+                    .render(context={"t": text})
+
+        elif path == "/chromosomeLength":
+            specie = str(arguments['specie'][0].strip())
+            dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
+            number_chromo = int(arguments['chromosome'][0].strip())
+            dict_all = dict_answer["top_level_region"]
+
+            line_position = []
+            for i in range(0,len(dict_all)):
+                line_position.append(dict_all[i]["name"])
+            try:
+
+                position = line_position.index(str(number_chromo))
+                wanted_line = dict_all[position]
+
+                length = int(wanted_line["length"])
 
 
+                contents = read_html_file(path[1:] + ".html") \
+                    .render(context={
+                    "l": length})
+
+            except ValueError:
+               text = "That chromosome does not exist. Choose another one."
+               contents = read_html_file("error.html") \
+                   .render(context={"t": text})
 
 
 
@@ -146,3 +178,5 @@ with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("")
         print("Stoped by the user")
         httpd.server_close()
+
+        #{"genes": SERVER + "info/species" + PARAMS}

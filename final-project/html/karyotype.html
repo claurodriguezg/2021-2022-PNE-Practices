@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>KARYOTYPE OF A SPECIFIC SPECIES</title>
+
 </head>
-<body>
+<body style="background-color: cadetblue;">
+The name of the chromosomes are:
+{% for o in context.karyotype%}
+<p>{{o}}</p>
+{% endfor %}
+<a href="http://localhost:8080/">Main page</a>
+
 
 </body>
 </html>
