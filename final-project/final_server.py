@@ -179,4 +179,3 @@ with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("Stoped by the user")
         httpd.server_close()
 
-        #{"genes": SERVER + "info/species" + PARAMS}
