@@ -46,6 +46,17 @@
         <input type="submit" value="SEND">
     </form>
 
+    <br>
+
+    <form action = "geneInfo">
+         2) Introduce a gene in order to get its information:
+         <select name="info" >
+             {% for n in context.n_names %}
+                <option value={{n}}>{{n}}</option>
+                {% endfor %}
+        <input type="submit" value="SEND">
+    </form>
+
 
 
 

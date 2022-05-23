@@ -160,6 +160,21 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 "n": names
             })
 
+        elif path == "/geneInfo":
+            gene = str(arguments['info'][0].strip())
+            key = GENES[gene]
+            dict_answer = make_ensembl_request("/sequence/id/" + str(key), "")
+            description = dict_answer["desc"].split(":")
+            length = int(description[4]) - int(description[3])
+
+            contents = read_html_file(path[1:] + ".html") \
+                .render(context={
+                "chromosome_n": description[2],
+                "n": gene,
+                "id": key,
+                "l": length
+            })
+
 
         else:
             contents = "I am the happy server! :-)"
