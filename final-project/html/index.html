@@ -35,6 +35,16 @@
             <input type="submit" value="SEND">
         </form>
 
+    <h2>MEDIUM Level Services </h2>
+
+ <form action = "geneSeq">
+         1) Introduce a gene in order to get its sequence:
+         <select name="seq" >
+             {% for n in context.n_names %}
+                <option value={{n}}>{{n}}</option>
+                {% endfor %}
+        <input type="submit" value="SEND">
+    </form>
 
 
 

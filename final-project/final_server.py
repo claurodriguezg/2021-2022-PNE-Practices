@@ -7,10 +7,26 @@ from urllib.parse import parse_qs, urlparse
 import http.client
 import json
 
+
 HTML_FOLDER = "./html/"
 SERVER = 'rest.ensembl.org'
 PARAMS = '?content-type=application/json'
 
+GENES = {"FRAT1": "ENSG00000165879",
+             "ADA": "ENSG00000196839",
+             "FXN": "ENSG00000165060",
+             "RNU6_269P": "ENSG00000212379",
+             "MIR633": "ENSG00000207552",
+             "TTTY4C": "ENSG00000228296",
+             "RBMY2YP": "ENSG00000227633",
+             "FGFR3": "ENSG00000068078",
+             "KDR": "ENSG00000128052",
+             "ANK2": "ENSG00000145362"}
+
+names = GENES.keys()
+NAMES_LIST = []
+for n in names:
+    NAMES_LIST.append(n)
 
 
 def read_html_file(filename):
@@ -69,7 +85,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Message to send back to the client
         if self.path == "/":
             contents = read_html_file("index.html")\
-                .render()
+                .render(context={"n_names": NAMES_LIST})
+
         elif path == "/list_species":
 
             dict_answer = make_ensembl_request("/info/species", "")
@@ -132,11 +149,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                contents = read_html_file("error.html") \
                    .render(context={"t": text})
 
-
-
-
-
-
+        elif path == "/geneSeq":
+            gene = str(arguments['seq'][0].strip())
+            key = GENES[gene]
+            dict_answer = make_ensembl_request("/sequence/id/" + str(key) , "")
+            sequence = dict_answer["seq"]
+            contents = read_html_file(path[1:] + ".html") \
+                .render(context={
+                "g": sequence,
+                "n": names
+            })
 
 
         else:
