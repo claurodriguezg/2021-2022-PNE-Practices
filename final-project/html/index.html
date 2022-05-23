@@ -57,6 +57,17 @@
         <input type="submit" value="SEND">
     </form>
 
+    <br>
+
+     <form action = "geneCalc">
+         2) Introduce a gene in order to get the length and percentage of its bases:
+         <select name="calc" >
+             {% for n in context.n_names %}
+                <option value={{n}}>{{n}}</option>
+                {% endfor %}
+        <input type="submit" value="SEND">
+    </form>
+
 
 
 

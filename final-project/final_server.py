@@ -1,11 +1,12 @@
 import http.server
 import socketserver
-import termcolor  # if we have it in gery it means we are not using the module yet
+import termcolor
 from pathlib import Path
 import jinja2 as j
 from urllib.parse import parse_qs, urlparse
 import http.client
 import json
+import Seq1
 
 
 HTML_FOLDER = "./html/"
@@ -36,49 +37,45 @@ def read_html_file(filename):
 
 
 def make_ensembl_request(url,params):
-    #connect with the server
+
     conn = http.client.HTTPConnection(SERVER)
     parameters = '?content-type=application/json'
-    # -- Send the request message, using the GET method. We are requesting the main page (/)
+
     try:
        conn.request("GET", url + parameters + params)
 
     except ConnectionRefusedError:
         print("ERROR! Cannot connect to the Server")
-        exit()  # -- Read the response message from the server
+        exit()
 
     r1 = conn.getresponse()
 
-    # -- Print the status line
-    print(f"Response received!: {r1.status} {r1.reason} \n")
-    # -- Read the response´s body
-    data1 = r1.read().decode('utf-8')  #this is the dictionary
 
-    # -- Print the received data
+    print(f"Response received!: {r1.status} {r1.reason} \n")
+
+    data1 = r1.read().decode('utf-8')
+
+
     our_dict = json.loads(data1)
     return our_dict
 
 
-# Define the Server's port
+
 PORT = 8080
 
-# -- This is for preventing the error: "Port already in use"
+
 socketserver.TCPServer.allow_reuse_address = True
 
 
-# Class with our Handler. It is a called derived from BaseHTTPRequestHandler
-# It means that our class inheritates all his methods and properties
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
-        """This method is called whenever the client invokes the GET method
-        in the HTTP protocol request"""
-        # Print the request line
+
         termcolor.cprint(self.requestline, 'green')
 
         url_path = urlparse(self.path)
-        path = url_path.path #this is the url
-        arguments = parse_qs(url_path.query)  #esto es lo que conviertes en diccionario
+        path = url_path.path
+        arguments = parse_qs(url_path.query)
         print("The old path was", self.path)
         print("The new path is", url_path.path)
         print("arguments", arguments)
@@ -86,6 +83,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         if self.path == "/":
             contents = read_html_file("index.html")\
                 .render(context={"n_names": NAMES_LIST})
+
+#BASIC LEVEL:
 
         elif path == "/list_species":
 
@@ -149,6 +148,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                contents = read_html_file("error.html") \
                    .render(context={"t": text})
 
+
+#MEDIUM LEVEL:
+
+
         elif path == "/geneSeq":
             gene = str(arguments['seq'][0].strip())
             key = GENES[gene]
@@ -169,10 +172,40 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             contents = read_html_file(path[1:] + ".html") \
                 .render(context={
+                "start": description[3],
+                "end": description[4],
                 "chromosome_n": description[2],
                 "n": gene,
                 "id": key,
                 "l": length
+            })
+
+        elif path == "/geneCalc":
+            gene = str(arguments['calc'][0].strip())
+            key = GENES[gene]
+            dict_answer = make_ensembl_request("/sequence/id/" + str(key) , "")
+            sequence = dict_answer["seq"]
+
+            s = Seq1.Seq(sequence)
+
+            bases_count_dict = s.count()[5]
+            percentages_bases = []
+            bases = []
+
+            for b in bases_count_dict:
+                percentage = str(round((bases_count_dict[b] / s.len()) * 100, 1))
+
+                percentages_bases.append(percentage)
+                bases.append(b)
+                dict_b_p = dict(zip(bases, percentages_bases))
+
+            contents = read_html_file(path[1:] + ".html") \
+                .render(context={
+                "length": s.len(),
+                "p_a": "A: " + dict_b_p["A"] + "%",
+                "p_c": "C: " + dict_b_p["C"] + "%",
+                "p_g": "G: " + dict_b_p["G"] + "%",
+                "p_t": "T: " + dict_b_p["T"] + "%"
             })
 
 
