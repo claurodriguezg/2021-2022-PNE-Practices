@@ -197,32 +197,30 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
         elif path == "/geneList":
-            specie = arguments['specie'][0].strip()
+            specie = str(arguments['specie'][0].strip())
             name = str(arguments['name_chromo'][0].strip())
             s = str(arguments['start'][0].strip())
             e = str(arguments['end'][0].strip())
             desc = name + ":" + s + "-" + e
-            dict_answer = make_ensembl_request("/overlap/region/" + str(specie) + "/" + desc, ";feature=gene;feature=transcript;feature=cds;feature=exon")
-
-            g_id = []
+            dict_answer = make_ensembl_request("/phenotype/region/" + specie + "/" + desc, "")
+            several_lists = []
+            a = []
+            genes_result = []
             for i in range(0,len(dict_answer)):
-                g_id.append(dict_answer[i]["id"])
-            for g in g_id:
-                dict_answer_2 = make_ensembl_request("/overlap/id/" + g, "")
-
-
-                names = []
-                for n in range(0,len(dict_answer_2)):
-                    names.append(dict_answer_2[n]["display_name"])
-
-            print(names)
-
-
-
+                several_lists.append(dict_answer[i]["phenotype_associations"])
+                for p in several_lists:
+                    for t in p:
+                        if "attributes" in t:
+                            a.append(t["attributes"])
+                            for c in a:
+                                for k,v in c.items():
+                                    if k == "associated_gene":
+                                        v = c[k]
+                                        genes_result.append(v)
 
             contents = read_html_file(path[1:] + ".html") \
                 .render(context={
-                "n_g": g_id,
+                "n_g": genes_result
 
             })
 

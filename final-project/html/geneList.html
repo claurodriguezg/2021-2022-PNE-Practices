@@ -8,11 +8,9 @@
 <body style="background-color: coral;">
 <h2>GENE´S NAMES:</h2>
 The names of the genes are:
-<ul>
-    <il><p>{{context.n_g}}</p></il>
-
-
-</ul>
+{% for g in context.n_g%}
+ <li><p>{{g}}</p> </li>
+{% endfor %}
 
 
 <a href="http://localhost:8080/">Main page</a>
