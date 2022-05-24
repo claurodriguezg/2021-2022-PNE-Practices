@@ -197,32 +197,42 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
         elif path == "/geneList":
-            specie = str(arguments['specie'][0].strip())
-            name = str(arguments['name_chromo'][0].strip())
-            s = str(arguments['start'][0].strip())
-            e = str(arguments['end'][0].strip())
-            desc = name + ":" + s + "-" + e
-            dict_answer = make_ensembl_request("/phenotype/region/" + specie + "/" + desc, "")
-            several_lists = []
-            a = []
-            genes_result = []
-            for i in range(0,len(dict_answer)):
-                several_lists.append(dict_answer[i]["phenotype_associations"])
-                for p in several_lists:
-                    for t in p:
-                        if "attributes" in t:
-                            a.append(t["attributes"])
-                            for c in a:
-                                for k,v in c.items():
-                                    if k == "associated_gene":
-                                        v = c[k]
-                                        genes_result.append(v)
 
-            contents = read_html_file(path[1:] + ".html") \
-                .render(context={
-                "n_g": genes_result
+            try:
 
-            })
+                specie = str(arguments['specie'][0].strip())
+                name = str(arguments['name_chromo'][0].strip())
+                s = str(arguments['start'][0].strip())
+                e = str(arguments['end'][0].strip())
+                desc = name + ":" + s + "-" + e
+                dict_answer = make_ensembl_request("/phenotype/region/" + specie + "/" + desc, "")
+
+                if len(dict_answer) > 0:
+
+                    gene_result = []
+                    for i in range(0,len(dict_answer)):
+                        for c in dict_answer[i]["phenotype_associations"]:
+                            if "attributes" in c:
+                                if "associated_gene" in c["attributes"]:
+                                    gene_result.append(c["attributes"]["associated_gene"])
+
+                    contents = read_html_file(path[1:] + ".html") \
+                        .render(context={
+                        "n_g": gene_result
+                    })
+
+                elif len(dict_answer) == 0:
+
+                    contents = read_html_file("error.html") \
+                        .render()
+
+            except KeyError:
+                contents = read_html_file("error.html") \
+                    .render()
+
+
+
+
 
 
         else:
