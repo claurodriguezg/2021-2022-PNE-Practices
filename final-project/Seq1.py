@@ -117,6 +117,20 @@ class Seq:
 
         return(ordered, d)
 
+    def info(self):
+        print("Total lenght: ", len(self.strbases))
+        d = {"A": 0, "C": 0, "G": 0, "T": 0}
+        for b in self.strbases:
+            d[b] += 1
+        total = sum(d.values())
+        for k, v in d.items():
+            d[k] = [v, (v * 100) / total]
+        final_dict = d
+        message = ""
+        for k, v in final_dict.items():
+            message += k + ": " + str(round(v[1], 1)) + "%" + "\n"
+        return message
+
 
 
 

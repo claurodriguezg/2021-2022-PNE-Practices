@@ -155,7 +155,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/geneSeq":
             gene = str(arguments['seq'][0].strip())
             key = GENES[gene]
-            dict_answer = make_ensembl_request("/sequence/id/" + str(key) , "")
+            dict_answer = make_ensembl_request("/sequence/id/" + str(key), "")
             sequence = dict_answer["seq"]
             contents = read_html_file(path[1:] + ".html") \
                 .render(context={
@@ -188,35 +188,42 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             s = Seq1.Seq(sequence)
 
-            bases_count_dict = s.count()[5]
-            percentages_bases = []
-            bases = []
-
-            for b in bases_count_dict:
-                percentage = str(round((bases_count_dict[b] / s.len()) * 100, 1))
-
-                percentages_bases.append(percentage)
-                bases.append(b)
-                dict_b_p = dict(zip(bases, percentages_bases))
 
             contents = read_html_file(path[1:] + ".html") \
                 .render(context={
                 "length": s.len(),
-                "p_a": "A: " + dict_b_p["A"] + "%",
-                "p_c": "C: " + dict_b_p["C"] + "%",
-                "p_g": "G: " + dict_b_p["G"] + "%",
-                "p_t": "T: " + dict_b_p["T"] + "%"
+                "p": s.info()
             })
 
+
         elif path == "/geneList":
-            gene = str(arguments['seq'][0].strip())
-            key = GENES[gene]
-            dict_answer = make_ensembl_request("/sequence/id/" + str(key), "")
-            sequence = dict_answer["seq"]
+            specie = arguments['specie'][0].strip()
+            name = str(arguments['name_chromo'][0].strip())
+            s = str(arguments['start'][0].strip())
+            e = str(arguments['end'][0].strip())
+            desc = name + ":" + s + "-" + e
+            dict_answer = make_ensembl_request("/overlap/region/" + str(specie) + "/" + desc, ";feature=gene;feature=transcript;feature=cds;feature=exon")
+
+            g_id = []
+            for i in range(0,len(dict_answer)):
+                g_id.append(dict_answer[i]["id"])
+            for g in g_id:
+                dict_answer_2 = make_ensembl_request("/overlap/id/" + g, "")
+
+
+                names = []
+                for n in range(0,len(dict_answer_2)):
+                    names.append(dict_answer_2[n]["display_name"])
+
+            print(names)
+
+
+
+
             contents = read_html_file(path[1:] + ".html") \
                 .render(context={
-                "g": sequence,
-                "n": names
+                "n_g": g_id,
+
             })
 
 

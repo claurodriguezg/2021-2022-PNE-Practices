@@ -25,3 +25,22 @@ to search for info we need a while loop
 
 
 
+  bases_count_dict = s.count()[5]
+            percentages_bases = []
+            bases = []
+
+            for b in bases_count_dict:
+                percentage = str(round((bases_count_dict[b] / s.len()) * 100, 1))
+
+                percentages_bases.append(percentage)
+                bases.append(b)
+                dict_b_p = dict(zip(bases, percentages_bases))
+
+            contents = read_html_file(path[1:] + ".html") \
+                .render(context={
+                "length": s.len(),
+                "p_a": "A: " + dict_b_p["A"] + "%",
+                "p_c": "C: " + dict_b_p["C"] + "%",
+                "p_g": "G: " + dict_b_p["G"] + "%",
+                "p_t": "T: " + dict_b_p["T"] + "%"
+            })
