@@ -90,16 +90,18 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/list_species":
             dict_answer = make_ensembl_request("/info/species", "")
             species_all = dict_answer["species"]
-
-            if not "json" in arguments:
-                selected_species = []
+            selected_species = []
+            limit = int(arguments["limit"][0])
+            try:
                 try:
-                    try:
-                        limit = int(arguments['limit'][0])
+                    for i in range(0, limit):
+                        selected_species.append(species_all[i]["common_name"])
 
-                        for i in range(0, limit):
-                            selected_species.append(species_all[i]["common_name"])
+                    if "json" in arguments:
+                        contents = read_html_file("json_client.py") \
+                            .render(context={json.dumps(species_all)})
 
+                    else:
                         contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
                             .render(context={
                             "species": selected_species,
@@ -107,22 +109,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             "limit": limit
                             })
 
-                    except KeyError:
-                        for i in range(0, len(species_all)):
-                            selected_species.append(species_all[i]["common_name"])
+                except KeyError:
+                    for i in range(0, len(species_all)):
+                        selected_species.append(species_all[i]["common_name"])
 
-                        contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                            .render(context={
-                            "species": selected_species})
+                    contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                        .render(context={
+                        "species": selected_species})
 
-                except IndexError:
-                    contents = read_html_file(HTML_FOLDER + "error.html") \
-                        .render()
-
-            elif "json" in arguments:
-                contents = read_html_file("json_client.py") \
-                    .render(context={json.dumps(species_all)})
-
+            except IndexError:
+                contents = read_html_file(HTML_FOLDER + "error.html") \
+                    .render()
 
         elif path == "/karyotype":
             try:
