@@ -128,7 +128,7 @@ class Seq:
         final_dict = d
         message = ""
         for k, v in final_dict.items():
-            message += k + ": " + str(round(v[1], 1)) + "%" + "\n"
+            message += k + ": " + str(round(v[1], 1)) + "%"
         return message
 
 

@@ -62,7 +62,7 @@ def make_ensembl_request(url,params):
 
 
 
-PORT = 8080
+PORT = 6123
 
 
 socketserver.TCPServer.allow_reuse_address = True
@@ -77,6 +77,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         url_path = urlparse(self.path)
         path = url_path.path
         arguments = parse_qs(url_path.query)
+
         print("The old path was", self.path)
         print("The new path is", url_path.path)
         print("arguments", arguments)
@@ -91,9 +92,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             dict_answer = make_ensembl_request("/info/species", "")
             species_all = dict_answer["species"]
             selected_species = []
-            limit = int(arguments["limit"][0])
+
             try:
                 try:
+                    limit = int(arguments["limit"][0])
                     for i in range(0, limit):
                         selected_species.append(species_all[i]["common_name"])
 
@@ -130,9 +132,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                 info_all = dict_answer["karyotype"]
 
-                contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                    .render(context={
-                    "karyotype": info_all})
+                if "json" in arguments:
+                    contents = {"karyotype": info_all}
+
+                else:
+                    contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                        .render(context={
+                        "karyotype": info_all})
+
             except KeyError:
                 contents = read_html_file(HTML_FOLDER + "error.html") \
                     .render()
@@ -154,10 +161,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                 length = int(wanted_line["length"])
 
+                if "json" in arguments:
+                    contents = {"l": length}
+                else:
 
-                contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                    .render(context={
-                    "l": length})
+                    contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                        .render(context={
+                        "l": length})
 
             except Exception:
                contents = read_html_file(HTML_FOLDER + "error.html") \
@@ -172,11 +182,17 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             key = GENES[gene]
             dict_answer = make_ensembl_request("/sequence/id/" + str(key), "")
             sequence = dict_answer["seq"]
-            contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                .render(context={
-                "g": sequence,
-                "n": names
-            })
+            if "json" in arguments:
+                contents = {
+                    "g": sequence,
+                    "n": names
+                }
+            else:
+                contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                    .render(context={
+                    "g": sequence,
+                    "n": names
+                })
 
         elif path == "/geneInfo":
             gene = str(arguments['info'][0].strip())
@@ -184,16 +200,27 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             dict_answer = make_ensembl_request("/sequence/id/" + str(key), "")
             description = dict_answer["desc"].split(":")
             length = int(description[4]) - int(description[3])
+            if "json" in arguments:
+                contents = {
+                    "start": description[3],
+                    "end": description[4],
+                    "chromosome_n": description[2],
+                    "n": gene,
+                    "id": key,
+                    "l": length
+                }
 
-            contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                .render(context={
-                "start": description[3],
-                "end": description[4],
-                "chromosome_n": description[2],
-                "n": gene,
-                "id": key,
-                "l": length
-            })
+            else:
+
+                contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                    .render(context={
+                    "start": description[3],
+                    "end": description[4],
+                    "chromosome_n": description[2],
+                    "n": gene,
+                    "id": key,
+                    "l": length
+                })
 
         elif path == "/geneCalc":
             gene = str(arguments['calc'][0].strip())
@@ -205,11 +232,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             s = Seq1.Seq(sequence)
 
-            contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                .render(context={
-                "length": s.len(),
-                "p": s.info()
-            })
+            if "json" in arguments:
+                contents = {
+                    "length": s.len(),
+                    "p": s.info()
+                }
+
+            else:
+
+                contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                    .render(context={
+                    "length": s.len(),
+                    "p": s.info()
+                })
 
 
         elif path == "/geneList":
@@ -231,12 +266,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             if "attributes" in c:
                                 if "associated_gene" in c["attributes"]:
                                     gene_result.append(c["attributes"]["associated_gene"])
-
-
-                    contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                        .render(context={
-                        "n_g": gene_result
-                    })
+                    if "json" in arguments:
+                        contents ={
+                            "n_g": gene_result
+                        }
+                    else:
+                        contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                            .render(context={
+                            "n_g": gene_result
+                        })
 
                 elif len(dict_answer) == 0:
 
