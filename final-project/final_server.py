@@ -95,23 +95,27 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             try:
                 try:
-                    limit = int(arguments["limit"][0])
-                    for i in range(0, limit):
-                        selected_species.append(species_all[i]["common_name"])
+                    try:
+                        limit = int(arguments["limit"][0])
+                        for i in range(0, limit):
+                            selected_species.append(species_all[i]["common_name"])
 
-                    if "json" in arguments:
-                        contents = {
-                            "species": selected_species,
-                            "n_species": len(species_all),
-                            "limit": limit}
+                        if "json" in arguments:
+                            contents = {
+                                "species": selected_species,
+                                "n_species": len(species_all),
+                                "limit": limit}
 
-                    else:
-                        contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                            .render(context={
-                            "species": selected_species,
-                            "n_species": len(species_all),
-                            "limit": limit
-                            })
+                        else:
+                            contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                                .render(context={
+                                "species": selected_species,
+                                "n_species": len(species_all),
+                                "limit": limit
+                                })
+                    except ValueError:
+                        contents = read_html_file(HTML_FOLDER + "error.html") \
+                            .render()
 
                 except KeyError:
                     for i in range(0, len(species_all)):
@@ -145,33 +149,39 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     .render()
 
         elif path == "/chromosomeLength":
-            specie = str(arguments['specie'][0].strip())
-            dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
-            number_chromo = int(arguments['chromosome'][0].strip())
             try:
-                dict_all = dict_answer["top_level_region"]
+                try:
+                    specie = str(arguments['specie'][0].strip())
+                    dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
+                    number_chromo = int(arguments['chromosome'][0].strip())
 
-                line_position = []
-                for i in range(0,len(dict_all)):
-                    line_position.append(dict_all[i]["name"])
+                    dict_all = dict_answer["top_level_region"]
+
+                    line_position = []
+                    for i in range(0,len(dict_all)):
+                        line_position.append(dict_all[i]["name"])
 
 
-                position = line_position.index(str(number_chromo))
-                wanted_line = dict_all[position]
+                    position = line_position.index(str(number_chromo))
+                    wanted_line = dict_all[position]
 
-                length = int(wanted_line["length"])
+                    length = int(wanted_line["length"])
 
-                if "json" in arguments:
-                    contents = {"l": length}
-                else:
+                    if "json" in arguments:
+                        contents = {"l": length}
+                    else:
 
-                    contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                        .render(context={
-                        "l": length})
+                        contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                            .render(context={
+                            "l": length})
+                except ValueError:
+                    contents = read_html_file(HTML_FOLDER + "error.html") \
+                        .render()
 
-            except Exception:
-               contents = read_html_file(HTML_FOLDER + "error.html") \
-                   .render()
+            except KeyError:
+                contents = read_html_file(HTML_FOLDER + "error.html") \
+                    .render()
+
 
 
 #MEDIUM LEVEL:
