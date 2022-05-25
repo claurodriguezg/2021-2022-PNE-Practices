@@ -99,7 +99,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                     if "json" in arguments:
                         contents = read_html_file("json_client.py") \
-                            .render(context={json.dumps(species_all)})
+                            .render(context={
+                            "species": selected_species,
+                            "n_species": len(species_all),
+                            "limit": limit
+                            })
 
                     else:
                         contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
@@ -257,6 +261,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         if not "json" in arguments:
             self.send_header('Content-Type', 'text/html')
         elif "json" in arguments:
+            contents = json.dumps(contents)
             self.send_header('Content-Type', 'application/json')
 
 

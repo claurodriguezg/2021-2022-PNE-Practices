@@ -1,18 +1,20 @@
 
 import http.client
+import termcolor
+import json
 
 PORT = 8080
-SERVER = 'localhost'
+IP = 'localhost'
 
-print(f"\nConnecting to server: {SERVER}:{PORT}\n")
+print(f"\nConnecting to server: {IP}:{PORT}\n")
 
 def make_ensembl_request(url,params):
 
-    conn = http.client.HTTPConnection(SERVER)
-    parameters = '?content-type=application/json'
+    conn = http.client.HTTPConnection(IP,PORT)
+
 
     try:
-       conn.request("GET", url + parameters + params)
+       conn.request("GET", url + params)
 
     except ConnectionRefusedError:
         print("ERROR! Cannot connect to the Server")
@@ -28,7 +30,18 @@ def make_ensembl_request(url,params):
     our_dict = json.loads(data1)
     return our_dict
 
-#print(f"CONTENT: {our_dict}")
+print("BASIC: ")
+
+print()
+
+limit = str(input("How many species are you looking for?: "))
+
+termcolor.cprint("The list of species is: ")
+listSpecies = make_ensembl_request("/listSpecies?", "limit=" + limit + "&json=1")
+print(listSpecies)
+
+
+
 
 
 
