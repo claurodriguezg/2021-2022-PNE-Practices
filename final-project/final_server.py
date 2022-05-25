@@ -106,19 +106,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             "species": selected_species,
                             "n_species": len(species_all),
                             "limit": limit
-                        })
+                            })
 
                     except KeyError:
-                    for i in range(0, len(species_all)):
-                        selected_species.append(species_all[i]["common_name"])
+                        for i in range(0, len(species_all)):
+                            selected_species.append(species_all[i]["common_name"])
 
-                    contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                        .render(context={
-                        "species": selected_species})
+                        contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                            .render(context={
+                            "species": selected_species})
 
                 except IndexError:
-                contents = read_html_file(HTML_FOLDER + "error.html") \
-                    .render()
+                    contents = read_html_file(HTML_FOLDER + "error.html") \
+                        .render()
 
             elif "json" in arguments:
                 contents = read_html_file("json_client.py") \
