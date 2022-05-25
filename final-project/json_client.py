@@ -25,7 +25,7 @@ def make_ensembl_request(url,params):
     data1 = r1.read().decode('utf-8')
 
 
-    our_dict = json.loads(data1)
+    our_dict = json.dumps(data1)
     return our_dict
 
 #print(f"CONTENT: {our_dict}")

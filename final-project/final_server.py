@@ -88,11 +88,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 #BASIC LEVEL:
 
         elif path == "/list_species":
+            dict_answer = make_ensembl_request("/info/species", "")
+            species_all = dict_answer["species"]
 
             if not "json" in arguments:
-
-                dict_answer = make_ensembl_request("/info/species", "")
-                species_all = dict_answer["species"]
                 selected_species = []
                 try:
                     try:
@@ -122,11 +121,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             elif "json" in arguments:
                 contents = read_html_file("json_client.py") \
-                    .render(context={
-                    "species": selected_species,
-                    "n_species": len(species_all),
-                    "limit": limit
-                })
+                    .render(context={json.dumps(species_all)})
 
 
 
