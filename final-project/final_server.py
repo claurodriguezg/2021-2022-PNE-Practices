@@ -98,12 +98,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         selected_species.append(species_all[i]["common_name"])
 
                     if "json" in arguments:
-                        contents = read_html_file("json_client.py") \
-                            .render(context={
+                        contents = {
                             "species": selected_species,
                             "n_species": len(species_all),
-                            "limit": limit
-                            })
+                            "limit": limit}
 
                     else:
                         contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
