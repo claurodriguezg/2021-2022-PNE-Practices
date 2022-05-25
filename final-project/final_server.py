@@ -124,10 +124,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     .render(context={json.dumps(species_all)})
 
 
-
-
-
-
         elif path == "/karyotype":
             try:
                 specie = str(arguments['specie'][0].strip())
