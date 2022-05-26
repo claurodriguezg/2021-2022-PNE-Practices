@@ -150,30 +150,53 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         elif path == "/chromosomeLength":
             try:
+
+                specie = str(arguments['specie'][0].strip())
+                dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
                 try:
-                    specie = str(arguments['specie'][0].strip())
-                    dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
-                    number_chromo = int(arguments['chromosome'][0].strip())
-
+                    length_chromo = int(arguments['length'][0].strip())
                     dict_all = dict_answer["top_level_region"]
-
-                    line_position = []
+                    names_chromo = []
                     for i in range(0,len(dict_all)):
-                        line_position.append(dict_all[i]["name"])
+                        names_chromo.append(dict_all[i]["name"])
 
+                    if length_chromo >= 0:
 
-                    position = line_position.index(str(number_chromo))
-                    wanted_line = dict_all[position]
+                        l_chromo = []
+                        for i in range(0,len(dict_all)):
+                            l_chromo.append(dict_all[i]["length"])
+                        largest_length = max(l_chromo)
 
-                    length = int(wanted_line["length"])
+                        if length_chromo <= largest_length:
 
-                    if "json" in arguments:
-                        contents = {"l": length}
+                            wanted_dict = dict(zip(l_chromo, names_chromo))
+                            wanted_lengths = []
+
+                            for l in l_chromo:
+                                if l >= length_chromo:
+                                    wanted_lengths.append(l)
+
+                            list_chromosomes = []
+                            for c in wanted_lengths:
+                                list_chromosomes.append(wanted_dict[c])
+
+                            print(list_chromosomes)
+
+                            if "json" in arguments:
+                                contents = {"l": length}
+                            else:
+                                contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
+                                    .render(context={
+                                    "list_c": list_chromosomes})
+
+                        else:
+                            contents = read_html_file(HTML_FOLDER + "error.html") \
+                                .render()
+
                     else:
+                        contents = read_html_file(HTML_FOLDER + "error.html") \
+                            .render()
 
-                        contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
-                            .render(context={
-                            "l": length})
                 except ValueError:
                     contents = read_html_file(HTML_FOLDER + "error.html") \
                         .render()
@@ -183,9 +206,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     .render()
 
 
-
 #MEDIUM LEVEL:
-
 
         elif path == "/geneSeq":
             gene = str(arguments['seq'][0].strip())

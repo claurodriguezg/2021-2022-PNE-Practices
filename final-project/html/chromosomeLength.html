@@ -6,7 +6,12 @@
 
 </head>
 <body style="background-color: cadetblue;">
-The length of the chromosome is: <p>{{context.l}}</p>
+The list of the chromosome is:
+<ul>
+    {% for c in context.list_c%}
+<li><p>{{c}}</p></li>
+{% endfor %}
+</ul>
 <a href="http://localhost:8080/">Main page</a>
 
 </body>
