@@ -150,7 +150,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         elif path == "/chromosomeLength":
             try:
-
                 specie = str(arguments['specie'][0].strip())
                 dict_answer = make_ensembl_request("/info/assembly/" + specie, "")
                 try:
@@ -204,7 +203,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             except KeyError:
                 contents = read_html_file(HTML_FOLDER + "error.html") \
                     .render()
-
 
 #MEDIUM LEVEL:
 
