@@ -76,7 +76,7 @@ while not exit:
         try:
             if limit.isdigit():
 
-                listSpecies = make_ensembl_request("/list_species?", "limit=" + str(limit) + "&json=1")
+                listSpecies = make_ensembl_request("/list_species", "?limit=" + str(limit) + "&json=1")
 
                 termcolor.cprint("The total amount of species in the database is: ", 'red', end="")
                 print(listSpecies["n_species"])
@@ -98,7 +98,7 @@ while not exit:
 
         try:
 
-            karyotype = make_ensembl_request("/karyotype?", "specie=" + str(specie) + "&json=1")
+            karyotype = make_ensembl_request("/karyotype", "?specie=" + str(specie) + "&json=1")
             termcolor.cprint("The karyotype is: ", 'red')
             for k in karyotype["karyotype"]:
                 print(k)
@@ -111,7 +111,7 @@ while not exit:
         specie = input("Write the specie: ")
         n_chromo = input("Which chromosome´s length would you like to know ?: ")
         try:
-            chromosome_L = make_ensembl_request("/chromosomeLength?", "specie=" + str(specie) + "+&chromosome=" + str(n_chromo) + "&json=1")
+            chromosome_L = make_ensembl_request("/chromosomeLength", "?specie=" + str(specie) + "+&chromosome=" + str(n_chromo) + "&json=1")
             termcolor.cprint("The length of the chromosome is: ", 'red', end="" )
             print(chromosome_L["l"])
         except TypeError:
@@ -130,7 +130,7 @@ while not exit:
 
             if gene in GENES:
 
-                dict_answer = make_ensembl_request("/geneSeq?", "seq=" + str(gene) + "&json=1")
+                dict_answer = make_ensembl_request("/geneSeq", "?seq=" + str(gene) + "&json=1")
                 termcolor.cprint("The sequence of the gene is:", 'red')
                 print(dict_answer["g"])
 
@@ -151,7 +151,7 @@ while not exit:
 
             gene = input("Choose a gen: ")
             if gene in GENES:
-                info = make_ensembl_request("/geneInfo?", "info=" + str(gene) + "&json=1")
+                info = make_ensembl_request("/geneInfo", "?info=" + str(gene) + "&json=1")
                 termcolor.cprint("The chosen gene is: ", 'red', end="")
                 print(gene)
                 termcolor.cprint("The id of the gene is: ", 'red', end="")
@@ -180,7 +180,7 @@ while not exit:
         gene = input("Choose a gen: ")
         try:
             if gene in GENES:
-                calc = make_ensembl_request("/geneCalc?", "calc=" + str(gene) + "&json=1")
+                calc = make_ensembl_request("/geneCalc", "?calc=" + str(gene) + "&json=1")
                 percentages = calc["p"].split("%")
                 percentages.remove(percentages[-1])
                 termcolor.cprint("The percentages of the bases are: ", 'red')
@@ -206,7 +206,7 @@ while not exit:
         end_point = input("Write an endpoint: ")
         try:
 
-            list = make_ensembl_request("/geneList?", "specie=" + str(specie) + "+&name_chromo=" + str(name_c) + "&start=" +
+            list = make_ensembl_request("/geneList", "?specie=" + str(specie) + "+&name_chromo=" + str(name_c) + "&start=" +
                                         str(start_point) + "&end=" + str(end_point) + "&json=1")
             termcolor.cprint("The list of the genes is: ", 'red')
             for i in list["n_g"]:
