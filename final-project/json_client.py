@@ -215,7 +215,6 @@ while not exit:
             termcolor.cprint("Something went wrong. That choice does not exist in the database. Please try again.",
                              'yellow')
 
-
     elif option == 8:
         termcolor.cprint("You have ended the program correctly.", 'red')
         exit = True
