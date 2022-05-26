@@ -3,7 +3,7 @@ import http.client
 import termcolor
 import json
 
-PORT = 6123
+PORT = 8080
 IP = 'localhost'
 SERVER = 'rest.ensembl.org'
 
@@ -132,7 +132,7 @@ while not exit:
 
                 dict_answer = make_ensembl_request("/geneSeq?", "seq=" + str(gene) + "&json=1")
                 termcolor.cprint("The sequence of the gene is:", 'red')
-                print(dict_answer)
+                print(dict_answer["g"])
 
             else:
                 termcolor.cprint("The gen selected is not in the list. Please choose a gen from the list", 'yellow')

@@ -62,7 +62,7 @@ def make_ensembl_request(url,params):
 
 
 
-PORT = 6123
+PORT = 8080
 
 
 socketserver.TCPServer.allow_reuse_address = True
@@ -195,13 +195,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             if "json" in arguments:
                 contents = {
                     "g": sequence,
-                    "n": names
+                    "n": NAMES_LIST
                 }
             else:
                 contents = read_html_file(HTML_FOLDER + path[1:] + ".html") \
                     .render(context={
                     "g": sequence,
-                    "n": names
+                    "n": NAMES_LIST
                 })
 
         elif path == "/geneInfo":
@@ -307,6 +307,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         if not "json" in arguments:
             self.send_header('Content-Type', 'text/html')
         elif "json" in arguments:
+            print(contents)
             contents = json.dumps(contents)
             self.send_header('Content-Type', 'application/json')
 
